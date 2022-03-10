@@ -1,0 +1,13 @@
+[General]
+ipc_version=4
+file=usb2_0_softphy
+module=USB2_0_SoftPHY_Top
+target_device=gw2ar18c-012
+type=usb_20_softphy
+version=1.0
+
+[Config]
+DisableIO=true
+LANG=0
+Synthesis_tool=GowinSynthesis
+tx_delay=0
