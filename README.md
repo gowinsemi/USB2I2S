@@ -1,5 +1,7 @@
 # USB To/From I2S
 
+### This design is still in the process of cleaned up and documentation write up.  Please use for your reference purpose appropriately.
+
 ### We are in the process of replacing the GOWIN EVAL-AUDIO Board with readily available I2S amplifier and microphone modules.  More instructions to follow, but here is the expected component list
 
 1. GOWIN DK-USB Board
