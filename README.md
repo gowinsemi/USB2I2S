@@ -21,7 +21,8 @@
    2. 1x7 female 0.1" header (Amplifier) & 1x6 female 0.1" header (Microphone)
 ##
 
-
+### Current Demonstration Setup with GOWIN DK-USB2.0 + MAX98357A I2S Amplifier Boards
+![Demo_Setup_Diagram](doc/DKUSB2_to_amplifier_setup.jpg)
 ### Current Demonstration Setup with GOWIN DK-USB2.0 + GOWIN EVAL_AUDIO Boards
 ![Demo_Setup_Diagram](doc/Demo_Setup_Diagram.png)
 
