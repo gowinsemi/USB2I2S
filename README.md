@@ -3,7 +3,7 @@
 ## Introduction
 The GOWIN UAC (USB Audio Class) to I2S Audio Card Reference Design provides an example of using various IPs to play and record Audio from a PC using GOWIN FPGAs.  The reference design connects GOWIN Semiconductors USB 2.0 PHY, Device Controller, I2S RX and TX IP Cores as well as provides some basic control logic via USB HID (Human Interface Device).  This provides a starting point to develop custom USB Audio solutions on GOWIN FPGAs.
 
-<span style="color:blue">*Note - Currently only the I2S Amplifier/Speaker output is working.  There is still an issue being actively debugged with the microphone input.  Design will be updated once the issue is resolved.*</span>
+⚠  <span style="color:blue">*Note - Currently only the I2S Amplifier/Speaker output is working.  There is still an issue being actively debugged with the microphone input.  Design will be updated once the issue is resolved.*</span>⚠
 
 ![USB2I2S_diagram](doc/USB2I2S_diagram.jpg)
 
@@ -101,7 +101,7 @@ The USB audio class demo utilizes two boards. First board is a DK USB 2.0 develo
 
 
 
-######  <span style="color:blue">*We are in the process of replacing the GOWIN EVAL-AUDIO Board with readily available MAX98357A Amplifier and SPH0645LM4H I2S Microphone modules.  More instructions to follow, but here is the expected component list*</span>.
+######  ⚠<span style="color:blue">*We are in the process of replacing the GOWIN EVAL-AUDIO Board with readily available MAX98357A Amplifier and SPH0645LM4H I2S Microphone modules.  More instructions to follow, but here is the expected component list*</span>.
 <span style="color:blue">1. GOWIN DK-USB Board 2. MAX98357A Amplifier Module</span>
 
 <span style="color:blue">2. SPH0645LM4H I2S Microphone module</span>
@@ -116,7 +116,7 @@ The USB audio class demo utilizes two boards. First board is a DK USB 2.0 develo
 
 <span style="color:blue">1x7 female 0.1" header (Amplifier) & 1x6 female 0.1" header (Microphone)</span>
 
-<span style="color:blue">*We have tested using the MAX98357A I2S Amplifier Module and it works with the current design without update.  Microphone will be tested after audio input is working*</span>.
+<span style="color:blue">*We have tested using the MAX98357A I2S Amplifier Module and it works with the current design without update.  Microphone will be tested after audio input is working*</span>.⚠
 
 ### Current Demonstration Setup with GOWIN DK-USB2.0 + MAX98357A I2S Amplifier Boards
 
