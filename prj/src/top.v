@@ -1,14 +1,15 @@
 module top(
-
     //I2S Interface
     input  wire        CLK_IN         ,
     input  wire        CLK_IIS_I      ,
+    //To Amplifier
     output wire        IIS_LRCK_O     ,
     output wire        IIS_BCLK_O     ,
     output wire        IIS_DATA_O     ,
-    input  wire        IIS_LRCK_I     ,
-    input  wire        IIS_BCLK_I     ,
-    input  wire        IIS_DATA_I     ,
+    //To Microphone
+    output  wire        IIS_LRCK_I     ,
+    output  wire        IIS_BCLK_I     ,
+    input   wire        IIS_DATA_I     ,
     
     //USB Interface
     input  wire        usb_vbus       ,
@@ -266,6 +267,14 @@ module top(
     wire [7:0] audio_rx_data;
     wire       audio_rx_empty;
     wire [10:0] audio_rx_num;
+
+    //assign IIS_LRCK_I = IIS_LRCK_O;
+    //assign IIS_BCLK_I = IIS_BCLK_O;
+
+
+    wire audio_rx_en;
+    assign audio_rx_en = usb_txpop&(endpt_sel == 4'd2);
+
     i2s_audio_rx audio_rx_inst
     (
          .CLK           (fclk       )//clock
@@ -277,11 +286,11 @@ module top(
         ,.PCM_LRCK_I    (1'b0)
         ,.PCM_BCLK_I    (1'b0)
         ,.PCM_DATA_I    (1'b0)
-        ,.IIS_LRCK_I    (IIS_LRCK_O)
-        ,.IIS_BCLK_I    (IIS_BCLK_O)
-        ,.IIS_DATA_I    (IIS_DATA_O)
+        ,.IIS_LRCK_I    (IIS_LRCK_I)
+        ,.IIS_BCLK_I    (IIS_BCLK_I)
+        ,.IIS_DATA_I    (IIS_DATA_I)
         ,.PCLK          (PHY_CLKOUT)
-        ,.FIFO_RD_I     (usb_txpop&(endpt_sel == 4'd2))
+        ,.FIFO_RD_I     (audio_rx_en)
         ,.FIFO_RD_DATA_O(audio_rx_data )
         ,.FIFO_RDNUM_O  (audio_rx_num  )
         ,.FIFO_EMPTY_O  (audio_rx_empty)
