@@ -1,8 +1,7 @@
-# USB To/From I2S
+# UAC (USB Audio Class) to I2S Audio Card Reference Design
 
 ## Introduction
-A introduction paragraph of what the design does
-Include a High Level Block Diagram w/top level modules + top level IO
+The USB Audio Class to I2S Audio Card Reference Design provides an example of using various IPs to play and record Audio from a PC using GOWIN FPGAs.  The reference design connects GOWIN Semiconductors USB 2.0 PHY, Device Controller, I2S RX and TX IP Cores as well as provides some basic control logic via USB HID (Human Interface Device).  This provides a starting point to develop custom USB Audio solutions on GOWIN FPGAs.
 
 ## Key Features
 Basically just bullet points of what the design does
