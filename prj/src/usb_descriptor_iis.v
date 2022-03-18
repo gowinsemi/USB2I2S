@@ -82,7 +82,7 @@ module usb_desc #(
     //localparam  DESC_HSCFG_LEN        = 16'd646;//16'd343;
     //localparam  DESC_HSCFG_LEN        = 16'd442;//16'd343;
     //localparam  DESC_HSCFG_LEN        = 16'd435;//16'd343;
-    localparam  DESC_HSCFG_LEN        = 16'd268;//16'd343;
+    localparam  DESC_HSCFG_LEN        = 16'd268 + 16'd106;//- 16'd8;//16'd343;
     //localparam  DESC_HSCFG_LEN        = 16'd181;//16'd343;
     //localparam  DESC_HSCFG_LEN        = 16'd243;//16'd343;
     //localparam  DESC_HSCFG_LEN        = 16'd434;//16'd343;
@@ -627,16 +627,6 @@ module usb_desc #(
         descrom[DESC_HSCFG_ADDR + 107 + 9] <= 8'h00;//iTerminal          : 0x00 (No String Descriptor)
         descrom[DESC_HSCFG_ADDR + 107 + 10] <= 8'h00;//iTerminal         : 0x00 (No String Descriptor)
         descrom[DESC_HSCFG_ADDR + 107 + 11] <= 8'h00;//iTerminal         : 0x00 (No String Descriptor)
-
-
-
-
-
-
-
-
-
-
         //---------------- Interface Descriptor -----------------
         descrom[DESC_HSCFG_ADDR + 119 + 0] <= 8'h09;//bLength            : 0x09 (9 bytes)
         descrom[DESC_HSCFG_ADDR + 119 + 1] <= 8'h04;//bDescriptorType    : 0x04 (Interface Descriptor)
@@ -716,135 +706,256 @@ module usb_desc #(
         // Bits 10..0              : 0x04 (4 bytes per packet)
         descrom[DESC_HSCFG_ADDR + 174 + 6] <= 8'h04;//bInterval        : 0x04 (4 ms)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //---------------- Interface Descriptor -----------------
-        descrom[DESC_HSCFG_ADDR + 181 + 0] <= 8'h09;//bLength            : 0x09 (9 bytes)
-        descrom[DESC_HSCFG_ADDR + 181 + 1] <= 8'h04;//bDescriptorType    : 0x04 (Interface Descriptor)
-        descrom[DESC_HSCFG_ADDR + 181 + 2] <= 8'h02;//bInterfaceNumber   : 0x02
-        descrom[DESC_HSCFG_ADDR + 181 + 3] <= 8'h00;//bAlternateSetting  : 0x00
-        descrom[DESC_HSCFG_ADDR + 181 + 4] <= 8'h00;//bNumEndpoints      : 0x00 (Default Control Pipe only)
-        descrom[DESC_HSCFG_ADDR + 181 + 5] <= 8'h01;//bInterfaceClass    : 0x01 (Audio)
-        descrom[DESC_HSCFG_ADDR + 181 + 6] <= 8'h02;//bInterfaceSubClass : 0x02 (Audio Streaming)
-        descrom[DESC_HSCFG_ADDR + 181 + 7] <= 8'h20;//bInterfaceProtocol : 0x20 (Device Protocol Version 2.0)
-        descrom[DESC_HSCFG_ADDR + 181 + 8] <= 8'h04;//iInterface         : 0x04 (String Descriptor 4)
-        //---------------- Interface Descriptor -----------------
-        descrom[DESC_HSCFG_ADDR + 190 + 0] <= 8'h09;//bLength            : 0x09 (9 bytes)
-        descrom[DESC_HSCFG_ADDR + 190 + 1] <= 8'h04;//bDescriptorType    : 0x04 (Interface Descriptor)
-        descrom[DESC_HSCFG_ADDR + 190 + 2] <= 8'h02;//bInterfaceNumber   : 0x02
-        descrom[DESC_HSCFG_ADDR + 190 + 3] <= 8'h01;//bAlternateSetting  : 0x01
-        descrom[DESC_HSCFG_ADDR + 190 + 4] <= 8'h02;//bNumEndpoints      : 0x02 (2 Endpoints)
-        descrom[DESC_HSCFG_ADDR + 190 + 5] <= 8'h01;//bInterfaceClass    : 0x01 (Audio)
-        descrom[DESC_HSCFG_ADDR + 190 + 6] <= 8'h02;//bInterfaceSubClass : 0x02 (Audio Streaming)
-        descrom[DESC_HSCFG_ADDR + 190 + 7] <= 8'h20;//bInterfaceProtocol : 0x20 (Device Protocol Version 2.0)
-        descrom[DESC_HSCFG_ADDR + 190 + 8] <= 8'h00;//iInterface         : 0x00 (No String Descriptor)
+        descrom[DESC_HSCFG_ADDR + 53 + 128 + 0] <= 8'h09;//bLength            : 0x09 (9 bytes)
+        descrom[DESC_HSCFG_ADDR + 53 + 128 + 1] <= 8'h04;//bDescriptorType    : 0x04 (Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 53 + 128 + 2] <= 8'h01;//bInterfaceNumber   : 0x01
+        descrom[DESC_HSCFG_ADDR + 53 + 128 + 3] <= 8'h02;//bAlternateSetting  : 0x02
+        descrom[DESC_HSCFG_ADDR + 53 + 128 + 4] <= 8'h02;//bNumEndpoints      : 0x02 (2 Endpoints)
+        descrom[DESC_HSCFG_ADDR + 53 + 128 + 5] <= 8'h01;//bInterfaceClass    : 0x01 (Audio)
+        descrom[DESC_HSCFG_ADDR + 53 + 128 + 6] <= 8'h02;//bInterfaceSubClass : 0x02 (Audio Streaming)
+        descrom[DESC_HSCFG_ADDR + 53 + 128 + 7] <= 8'h20;//bInterfaceProtocol : 0x20 (Device Protocol Version 2.0)
+        descrom[DESC_HSCFG_ADDR + 53 + 128 + 8] <= 8'h00;//iInterface         : 0x00 (No String Descriptor)
         //------ Audio Streaming Interface Descriptor 2.0 -------
-        descrom[DESC_HSCFG_ADDR + 199 + 0] <= 8'h10;//bLength            : 0x10 (16 bytes)
-        descrom[DESC_HSCFG_ADDR + 199 + 1] <= 8'h24;//bDescriptorType    : 0x24 (Audio Interface Descriptor)
-        descrom[DESC_HSCFG_ADDR + 199 + 2] <= 8'h01;//bDescriptorSubtype : 0x01 (AS General)
-        descrom[DESC_HSCFG_ADDR + 199 + 3] <= 8'h08;//bTerminalLink      : 0x03 (3)
-        descrom[DESC_HSCFG_ADDR + 199 + 4] <= 8'h05;//bmControls         : 0x05
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 0] <= 8'h10;//bLength            : 0x10 (16 bytes)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 1] <= 8'h24;//bDescriptorType    : 0x24 (Audio Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 2] <= 8'h01;//bDescriptorSubtype : 0x01 (AS General)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 3] <= 8'h01;//bTerminalLink      : 0x01 (1)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 4] <= 8'h05;//bmControls         : 0x05
         // D1..0: Active Alt Settng: 0x01 (read only)
         // D3..2: Valid Alt Settng : 0x01 (read only)
         // D7..4: Reserved         : 0x00
-        descrom[DESC_HSCFG_ADDR + 199 + 5] <= 8'h01;//bFormatType        : 0x01 (FORMAT_TYPE_I)
-        descrom[DESC_HSCFG_ADDR + 199 + 6] <= 8'h01;//bmFormats          : 0x00000001 (PCM)
-        descrom[DESC_HSCFG_ADDR + 199 + 7] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
-        descrom[DESC_HSCFG_ADDR + 199 + 8] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
-        descrom[DESC_HSCFG_ADDR + 199 + 9] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
-        descrom[DESC_HSCFG_ADDR + 199 + 10] <= 8'h02;//bNrChannels       : 0x02 (2 channels)
-        descrom[DESC_HSCFG_ADDR + 199 + 11] <= 8'h03;//bmChannelConfig   : 0x00000003 (FL, FR)
-        descrom[DESC_HSCFG_ADDR + 199 + 12] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
-        descrom[DESC_HSCFG_ADDR + 199 + 13] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
-        descrom[DESC_HSCFG_ADDR + 199 + 14] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
-        descrom[DESC_HSCFG_ADDR + 199 + 15] <= 8'h00;//iChannelNames     : 0x00 (No String Descriptor)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 5] <= 8'h01;//bFormatType        : 0x01 (FORMAT_TYPE_I)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 6] <= 8'h01;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 7] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 8] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 9] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 10] <= 8'h02;//bNrChannels       : 0x02 (2 channels)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 11] <= 8'h03;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 12] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 13] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 14] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 53 + 137 + 15] <= 8'h00;//iChannelNames     : 0x00 (No String Descriptor)
         //----- Audio Streaming Format Type Descriptor 2.0 ------
-        descrom[DESC_HSCFG_ADDR + 215 + 0] <= 8'h06;//bLength         : 0x06 (6 bytes)
-        descrom[DESC_HSCFG_ADDR + 215 + 1] <= 8'h24;//bDescriptorType : 0x24 (Audio Interface Descriptor)
-        descrom[DESC_HSCFG_ADDR + 215 + 2] <= 8'h02;//bDescriptorSubtype : 0x02 (Format Type)
-        descrom[DESC_HSCFG_ADDR + 215 + 3] <= 8'h01;//bFormatType        : 0x01 (FORMAT_TYPE_I)
-        descrom[DESC_HSCFG_ADDR + 215 + 4] <= 8'h02;//bSubslotSize       : 0x02 (2 bytes)
-        descrom[DESC_HSCFG_ADDR + 215 + 5] <= 8'h10;//bBitResolution     : 0x10 (16 bits)
+        descrom[DESC_HSCFG_ADDR + 53 + 153 + 0] <= 8'h06;//bLength         : 0x06 (6 bytes)
+        descrom[DESC_HSCFG_ADDR + 53 + 153 + 1] <= 8'h24;//bDescriptorType : 0x24 (Audio Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 53 + 153 + 2] <= 8'h02;//bDescriptorSubtype : 0x02 (Format Type)
+        descrom[DESC_HSCFG_ADDR + 53 + 153 + 3] <= 8'h01;//bFormatType        : 0x01 (FORMAT_TYPE_I)
+        descrom[DESC_HSCFG_ADDR + 53 + 153 + 4] <= 8'h03;//bSubslotSize       : 0x02 (3 bytes)
+        descrom[DESC_HSCFG_ADDR + 53 + 153 + 5] <= 8'h18;//bBitResolution     : 0x10 (24 bits)
         //----------------- Endpoint Descriptor -----------------
-        descrom[DESC_HSCFG_ADDR + 221 + 0] <= 8'h07;//bLength          : 0x07 (7 bytes)
-        descrom[DESC_HSCFG_ADDR + 221 + 1] <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
-        descrom[DESC_HSCFG_ADDR + 221 + 2] <= 8'h82;//bEndpointAddress : 0x82 (Direction=IN EndpointID=2)
-        descrom[DESC_HSCFG_ADDR + 221 + 3] <= 8'h05;//bmAttributes     : 0x05 (TransferType=Isochronous  SyncType=Asynchronous  EndpointType=Data)
-        descrom[DESC_HSCFG_ADDR + 221 + 4] <= 8'h08;//wMaxPacketSize   : 0x0308
-        descrom[DESC_HSCFG_ADDR + 221 + 5] <= 8'h03;//wMaxPacketSize   : 0x0308
+        descrom[DESC_HSCFG_ADDR + 53 + 159 + 0] <= 8'h07;//bLength          : 0x07 (7 bytes)
+        descrom[DESC_HSCFG_ADDR + 53 + 159 + 1] <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR + 53 + 159 + 2] <= 8'h01;//bEndpointAddress : 0x01 (Direction=OUT EndpointID=1)
+        descrom[DESC_HSCFG_ADDR + 53 + 159 + 3] <= 8'h05;//bmAttributes     : 0x05 (TransferType=Isochronous  SyncType=Asynchronous  EndpointType=Data)
+        descrom[DESC_HSCFG_ADDR + 53 + 159 + 4] <= 8'h08;//wMaxPacketSize   : 0x0308
+        descrom[DESC_HSCFG_ADDR + 53 + 159 + 5] <= 8'h03;//wMaxPacketSize   : 0x0308
         // Bits 15..13             : 0x00 (reserved, must be zero)
         // Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
         // Bits 10..0              : 0x308 (776 bytes per packet)
-        descrom[DESC_HSCFG_ADDR + 221 + 6] <= 8'h01;//bInterval                : 0x01 (1 ms)
+        descrom[DESC_HSCFG_ADDR + 53 + 159 + 6] <= 8'h01;//bInterval                : 0x01 (1 ms)
         //----------- Audio Data Endpoint Descriptor ------------
-        descrom[DESC_HSCFG_ADDR + 228 + 0] <= 8'h08;//bLength            : 0x08 (8 bytes)
-        descrom[DESC_HSCFG_ADDR + 228 + 1] <= 8'h25;//bDescriptorType    : 0x25 (Audio Endpoint Descriptor)
-        descrom[DESC_HSCFG_ADDR + 228 + 2] <= 8'h01;//bDescriptorSubtype : 0x01 (General)
-        descrom[DESC_HSCFG_ADDR + 228 + 3] <= 8'h00;//bmAttributes       : 0x00
-        descrom[DESC_HSCFG_ADDR + 228 + 4] <= 8'h00;//bLockDelayUnits    : 0x00
-        descrom[DESC_HSCFG_ADDR + 228 + 5] <= 8'h00;//wLockDelay         : 0x0000
-        descrom[DESC_HSCFG_ADDR + 228 + 6] <= 8'h00;//wLockDelay         : 0x0000
-        descrom[DESC_HSCFG_ADDR + 228 + 7] <= 8'h00;//wLockDelay         : 0x0000
+        descrom[DESC_HSCFG_ADDR + 53 + 166 + 0] <= 8'h08;//bLength            : 0x08 (8 bytes)
+        descrom[DESC_HSCFG_ADDR + 53 + 166 + 1] <= 8'h25;//bDescriptorType    : 0x25 (Audio Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR + 53 + 166 + 2] <= 8'h01;//bDescriptorSubtype : 0x01 (General)
+        descrom[DESC_HSCFG_ADDR + 53 + 166 + 3] <= 8'h00;//bmAttributes       : 0x00
+        descrom[DESC_HSCFG_ADDR + 53 + 166 + 4] <= 8'h00;//bLockDelayUnits    : 0x00
+        descrom[DESC_HSCFG_ADDR + 53 + 166 + 5] <= 8'h00;//wLockDelay         : 0x0000
+        descrom[DESC_HSCFG_ADDR + 53 + 166 + 6] <= 8'h00;//wLockDelay         : 0x0000
+        descrom[DESC_HSCFG_ADDR + 53 + 166 + 7] <= 8'h00;//wLockDelay         : 0x0000
         //----------------- Endpoint Descriptor -----------------
-        descrom[DESC_HSCFG_ADDR + 236 + 0] <= 8'h07;//bLength          : 0x07 (7 bytes)
-        descrom[DESC_HSCFG_ADDR + 236 + 1] <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
-        descrom[DESC_HSCFG_ADDR + 236 + 2] <= 8'h02;//bEndpointAddress : 0x02 (Direction=OUT EndpointID=2)
-        descrom[DESC_HSCFG_ADDR + 236 + 3] <= 8'h11;//bmAttributes     : 0x11 (TransferType=Isochronous  SyncType=None  EndpointType=Feedback)
-        descrom[DESC_HSCFG_ADDR + 236 + 4] <= 8'h04;//wMaxPacketSize   : 0x0004
-        descrom[DESC_HSCFG_ADDR + 236 + 5] <= 8'h00;//wMaxPacketSize   : 0x0004
+        descrom[DESC_HSCFG_ADDR + 53 + 174 + 0] <= 8'h07;//bLength          : 0x07 (7 bytes)
+        descrom[DESC_HSCFG_ADDR + 53 + 174 + 1] <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR + 53 + 174 + 2] <= 8'h81;//bEndpointAddress : 0x81 (Direction=IN EndpointID=1)
+        descrom[DESC_HSCFG_ADDR + 53 + 174 + 3] <= 8'h11;//bmAttributes     : 0x11 (TransferType=Isochronous  SyncType=None  EndpointType=Feedback)
+        descrom[DESC_HSCFG_ADDR + 53 + 174 + 4] <= 8'h04;//wMaxPacketSize   : 0x0004
+        descrom[DESC_HSCFG_ADDR + 53 + 174 + 5] <= 8'h00;//wMaxPacketSize   : 0x0004
         // Bits 15..13             : 0x00 (reserved, must be zero)
         // Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
         // Bits 10..0              : 0x04 (4 bytes per packet)
-        descrom[DESC_HSCFG_ADDR + 236 + 6] <= 8'h04;//bInterval        : 0x04 (4 ms)
+        descrom[DESC_HSCFG_ADDR + 53 + 174 + 6] <= 8'h04;//bInterval        : 0x04 (4 ms)
 
+        //---------------- Interface Descriptor -----------------
+        descrom[DESC_HSCFG_ADDR + 106 + 128 + 0] <= 8'h09;//bLength            : 0x09 (9 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 128 + 1] <= 8'h04;//bDescriptorType    : 0x04 (Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 128 + 2] <= 8'h01;//bInterfaceNumber   : 0x01
+        descrom[DESC_HSCFG_ADDR + 106 + 128 + 3] <= 8'h03;//bAlternateSetting  : 0x03
+        descrom[DESC_HSCFG_ADDR + 106 + 128 + 4] <= 8'h02;//bNumEndpoints      : 0x02 (2 Endpoints)
+        descrom[DESC_HSCFG_ADDR + 106 + 128 + 5] <= 8'h01;//bInterfaceClass    : 0x01 (Audio)
+        descrom[DESC_HSCFG_ADDR + 106 + 128 + 6] <= 8'h02;//bInterfaceSubClass : 0x02 (Audio Streaming)
+        descrom[DESC_HSCFG_ADDR + 106 + 128 + 7] <= 8'h20;//bInterfaceProtocol : 0x20 (Device Protocol Version 2.0)
+        descrom[DESC_HSCFG_ADDR + 106 + 128 + 8] <= 8'h00;//iInterface         : 0x00 (No String Descriptor)
+        //------ Audio Streaming Interface Descriptor 2.0 -------
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 0] <= 8'h10;//bLength            : 0x10 (16 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 1] <= 8'h24;//bDescriptorType    : 0x24 (Audio Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 2] <= 8'h01;//bDescriptorSubtype : 0x01 (AS General)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 3] <= 8'h01;//bTerminalLink      : 0x01 (1)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 4] <= 8'h05;//bmControls         : 0x05
+        // D1..0: Active Alt Settng: 0x01 (read only)
+        // D3..2: Valid Alt Settng : 0x01 (read only)
+        // D7..4: Reserved         : 0x00
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 5] <= 8'h01;//bFormatType        : 0x01 (FORMAT_TYPE_I)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 6] <= 8'h01;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 7] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 8] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 9] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 10] <= 8'h02;//bNrChannels       : 0x02 (2 channels)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 11] <= 8'h03;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 12] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 13] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 14] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 106 + 137 + 15] <= 8'h00;//iChannelNames     : 0x00 (No String Descriptor)
+        //----- Audio Streaming Format Type Descriptor 2.0 ------
+        descrom[DESC_HSCFG_ADDR + 106 + 153 + 0] <= 8'h06;//bLength         : 0x06 (6 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 153 + 1] <= 8'h24;//bDescriptorType : 0x24 (Audio Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 153 + 2] <= 8'h02;//bDescriptorSubtype : 0x02 (Format Type)
+        descrom[DESC_HSCFG_ADDR + 106 + 153 + 3] <= 8'h01;//bFormatType        : 0x01 (FORMAT_TYPE_I)
+        descrom[DESC_HSCFG_ADDR + 106 + 153 + 4] <= 8'h04;//bSubslotSize       : 0x02 (4 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 153 + 5] <= 8'h20;//bBitResolution     : 0x10 (32 bits)
+        //----------------- Endpoint Descriptor -----------------
+        descrom[DESC_HSCFG_ADDR + 106 + 159 + 0] <= 8'h07;//bLength          : 0x07 (7 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 159 + 1] <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 159 + 2] <= 8'h01;//bEndpointAddress : 0x01 (Direction=OUT EndpointID=1)
+        descrom[DESC_HSCFG_ADDR + 106 + 159 + 3] <= 8'h05;//bmAttributes     : 0x05 (TransferType=Isochronous  SyncType=Asynchronous  EndpointType=Data)
+        descrom[DESC_HSCFG_ADDR + 106 + 159 + 4] <= 8'h08;//wMaxPacketSize   : 0x0308
+        descrom[DESC_HSCFG_ADDR + 106 + 159 + 5] <= 8'h03;//wMaxPacketSize   : 0x0308
+        // Bits 15..13             : 0x00 (reserved, must be zero)
+        // Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
+        // Bits 10..0              : 0x308 (776 bytes per packet)
+        descrom[DESC_HSCFG_ADDR + 106 + 159 + 6] <= 8'h01;//bInterval                : 0x01 (1 ms)
+        //----------- Audio Data Endpoint Descriptor ------------
+        descrom[DESC_HSCFG_ADDR + 106 + 166 + 0] <= 8'h08;//bLength            : 0x08 (8 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 166 + 1] <= 8'h25;//bDescriptorType    : 0x25 (Audio Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 166 + 2] <= 8'h01;//bDescriptorSubtype : 0x01 (General)
+        descrom[DESC_HSCFG_ADDR + 106 + 166 + 3] <= 8'h00;//bmAttributes       : 0x00
+        descrom[DESC_HSCFG_ADDR + 106 + 166 + 4] <= 8'h00;//bLockDelayUnits    : 0x00
+        descrom[DESC_HSCFG_ADDR + 106 + 166 + 5] <= 8'h00;//wLockDelay         : 0x0000
+        descrom[DESC_HSCFG_ADDR + 106 + 166 + 6] <= 8'h00;//wLockDelay         : 0x0000
+        descrom[DESC_HSCFG_ADDR + 106 + 166 + 7] <= 8'h00;//wLockDelay         : 0x0000
+        //----------------- Endpoint Descriptor -----------------
+        descrom[DESC_HSCFG_ADDR + 106 + 174 + 0] <= 8'h07;//bLength          : 0x07 (7 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 174 + 1] <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 174 + 2] <= 8'h81;//bEndpointAddress : 0x81 (Direction=IN EndpointID=1)
+        descrom[DESC_HSCFG_ADDR + 106 + 174 + 3] <= 8'h11;//bmAttributes     : 0x11 (TransferType=Isochronous  SyncType=None  EndpointType=Feedback)
+        descrom[DESC_HSCFG_ADDR + 106 + 174 + 4] <= 8'h04;//wMaxPacketSize   : 0x0004
+        descrom[DESC_HSCFG_ADDR + 106 + 174 + 5] <= 8'h00;//wMaxPacketSize   : 0x0004
+        // Bits 15..13             : 0x00 (reserved, must be zero)
+        // Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
+        // Bits 10..0              : 0x04 (4 bytes per packet)
+        descrom[DESC_HSCFG_ADDR + 106 + 174 + 6] <= 8'h04;//bInterval        : 0x04 (4 ms)
 
+        //---------------- Interface Descriptor -----------------
+        descrom[DESC_HSCFG_ADDR + 106 + 181 + 0] <= 8'h09;//bLength            : 0x09 (9 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 181 + 1] <= 8'h04;//bDescriptorType    : 0x04 (Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 181 + 2] <= 8'h02;//bInterfaceNumber   : 0x02
+        descrom[DESC_HSCFG_ADDR + 106 + 181 + 3] <= 8'h00;//bAlternateSetting  : 0x00
+        descrom[DESC_HSCFG_ADDR + 106 + 181 + 4] <= 8'h00;//bNumEndpoints      : 0x00 (Default Control Pipe only)
+        descrom[DESC_HSCFG_ADDR + 106 + 181 + 5] <= 8'h01;//bInterfaceClass    : 0x01 (Audio)
+        descrom[DESC_HSCFG_ADDR + 106 + 181 + 6] <= 8'h02;//bInterfaceSubClass : 0x02 (Audio Streaming)
+        descrom[DESC_HSCFG_ADDR + 106 + 181 + 7] <= 8'h20;//bInterfaceProtocol : 0x20 (Device Protocol Version 2.0)
+        descrom[DESC_HSCFG_ADDR + 106 + 181 + 8] <= 8'h04;//iInterface         : 0x04 (String Descriptor 4)
+        //---------------- Interface Descriptor -----------------
+        descrom[DESC_HSCFG_ADDR + 106 + 190 + 0] <= 8'h09;//bLength            : 0x09 (9 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 190 + 1] <= 8'h04;//bDescriptorType    : 0x04 (Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 190 + 2] <= 8'h02;//bInterfaceNumber   : 0x02
+        descrom[DESC_HSCFG_ADDR + 106 + 190 + 3] <= 8'h01;//bAlternateSetting  : 0x01
+        descrom[DESC_HSCFG_ADDR + 106 + 190 + 4] <= 8'h02;//bNumEndpoints      : 0x02 (2 Endpoints)
+        descrom[DESC_HSCFG_ADDR + 106 + 190 + 5] <= 8'h01;//bInterfaceClass    : 0x01 (Audio)
+        descrom[DESC_HSCFG_ADDR + 106 + 190 + 6] <= 8'h02;//bInterfaceSubClass : 0x02 (Audio Streaming)
+        descrom[DESC_HSCFG_ADDR + 106 + 190 + 7] <= 8'h20;//bInterfaceProtocol : 0x20 (Device Protocol Version 2.0)
+        descrom[DESC_HSCFG_ADDR + 106 + 190 + 8] <= 8'h00;//iInterface         : 0x00 (No String Descriptor)
+        //------ Audio Streaming Interface Descriptor 2.0 -------
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 0] <= 8'h10;//bLength            : 0x10 (16 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 1] <= 8'h24;//bDescriptorType    : 0x24 (Audio Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 2] <= 8'h01;//bDescriptorSubtype : 0x01 (AS General)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 3] <= 8'h08;//bTerminalLink      : 0x03 (3)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 4] <= 8'h05;//bmControls         : 0x05
+        // D1..0: Active Alt Settng: 0x01 (read only)
+        // D3..2: Valid Alt Settng : 0x01 (read only)
+        // D7..4: Reserved         : 0x00
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 5] <= 8'h01;//bFormatType        : 0x01 (FORMAT_TYPE_I)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 6] <= 8'h01;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 7] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 8] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 9] <= 8'h00;//bmFormats          : 0x00000001 (PCM)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 10] <= 8'h02;//bNrChannels       : 0x02 (2 channels)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 11] <= 8'h03;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 12] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 13] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 14] <= 8'h00;//bmChannelConfig   : 0x00000003 (FL, FR)
+        descrom[DESC_HSCFG_ADDR + 106 + 199 + 15] <= 8'h00;//iChannelNames     : 0x00 (No String Descriptor)
+        //----- Audio Streaming Format Type Descriptor 2.0 ------
+        descrom[DESC_HSCFG_ADDR + 106 + 215 + 0] <= 8'h06;//bLength         : 0x06 (6 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 215 + 1] <= 8'h24;//bDescriptorType : 0x24 (Audio Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 215 + 2] <= 8'h02;//bDescriptorSubtype : 0x02 (Format Type)
+        descrom[DESC_HSCFG_ADDR + 106 + 215 + 3] <= 8'h01;//bFormatType        : 0x01 (FORMAT_TYPE_I)
+        descrom[DESC_HSCFG_ADDR + 106 + 215 + 4] <= 8'h02;//bSubslotSize       : 0x02 (2 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 215 + 5] <= 8'h10;//bBitResolution     : 0x10 (16 bits)
+        //----------------- Endpoint Descriptor -----------------
+        descrom[DESC_HSCFG_ADDR + 106 + 221 + 0] <= 8'h07;//bLength          : 0x07 (7 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 221 + 1] <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 221 + 2] <= 8'h82;//bEndpointAddress : 0x82 (Direction=IN EndpointID=2)
+        descrom[DESC_HSCFG_ADDR + 106 + 221 + 3] <= 8'h09;//bmAttributes     : 0x05 (TransferType=Isochronous  SyncType=Asynchronous  EndpointType=Data)
+        descrom[DESC_HSCFG_ADDR + 106 + 221 + 4] <= 8'h08;//wMaxPacketSize   : 0x0308
+        descrom[DESC_HSCFG_ADDR + 106 + 221 + 5] <= 8'h03;//wMaxPacketSize   : 0x0308
+        // Bits 15..13             : 0x00 (reserved, must be zero)
+        // Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
+        // Bits 10..0              : 0x308 (776 bytes per packet)
+        descrom[DESC_HSCFG_ADDR + 106 + 221 + 6] <= 8'h01;//bInterval                : 0x01 (1 ms)
+        //----------- Audio Data Endpoint Descriptor ------------
+        descrom[DESC_HSCFG_ADDR + 106 + 228 + 0] <= 8'h08;//bLength            : 0x08 (8 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 228 + 1] <= 8'h25;//bDescriptorType    : 0x25 (Audio Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 228 + 2] <= 8'h01;//bDescriptorSubtype : 0x01 (General)
+        descrom[DESC_HSCFG_ADDR + 106 + 228 + 3] <= 8'h00;//bmAttributes       : 0x00
+        descrom[DESC_HSCFG_ADDR + 106 + 228 + 4] <= 8'h00;//bLockDelayUnits    : 0x00
+        descrom[DESC_HSCFG_ADDR + 106 + 228 + 5] <= 8'h00;//wLockDelay         : 0x0000
+        descrom[DESC_HSCFG_ADDR + 106 + 228 + 6] <= 8'h00;//wLockDelay         : 0x0000
+        descrom[DESC_HSCFG_ADDR + 106 + 228 + 7] <= 8'h00;//wLockDelay         : 0x0000
+        ////----------------- Endpoint Descriptor -----------------
+        descrom[DESC_HSCFG_ADDR + 106 + 236 + 0] <= 8'h07;//bLength          : 0x07 (7 bytes)
+        descrom[DESC_HSCFG_ADDR + 106 + 236 + 1] <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR + 106 + 236 + 2] <= 8'h02;//bEndpointAddress : 0x02 (Direction=OUT EndpointID=2)
+        descrom[DESC_HSCFG_ADDR + 106 + 236 + 3] <= 8'h11;//bmAttributes     : 0x11 (TransferType=Isochronous  SyncType=None  EndpointType=Feedback)
+        descrom[DESC_HSCFG_ADDR + 106 + 236 + 4] <= 8'h04;//wMaxPacketSize   : 0x0004
+        descrom[DESC_HSCFG_ADDR + 106 + 236 + 5] <= 8'h00;//wMaxPacketSize   : 0x0004
+        // Bits 15..13             : 0x00 (reserved, must be zero)
+        // Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
+        // Bits 10..0              : 0x04 (4 bytes per packet)
+        descrom[DESC_HSCFG_ADDR + 106 + 236 + 6] <= 8'h04;//bInterval        : 0x04 (4 ms)
 
         //----------------HID Interface Descriptor -----------------
-        descrom[DESC_HSCFG_ADDR+ 243 + 0]  <= 8'h09;//bLength            : 0x09 (9 bytes)
-        descrom[DESC_HSCFG_ADDR+ 243 + 1]  <= 8'h04;//bDescriptorType    : 0x04 (Interface Descriptor)
-        descrom[DESC_HSCFG_ADDR+ 243 + 2]  <= 8'h03;//bInterfaceNumber   : 0x03
-        descrom[DESC_HSCFG_ADDR+ 243 + 3]  <= 8'h00;//bAlternateSetting  : 0x00
-        descrom[DESC_HSCFG_ADDR+ 243 + 4]  <= 8'h01;//bNumEndpoints      : 0x01 (2 Endpoints)
-        descrom[DESC_HSCFG_ADDR+ 243 + 5]  <= 8'h03;//bInterfaceClass    : 0x03 (HID - Human Interface Device)
-        descrom[DESC_HSCFG_ADDR+ 243 + 6]  <= 8'h00;//bInterfaceSubClass : 0x00 (None)
-        descrom[DESC_HSCFG_ADDR+ 243 + 7]  <= 8'h00;//bInterfaceProtocol : 0x00 (None)
-        descrom[DESC_HSCFG_ADDR+ 243 + 8]  <= 8'h07;//iInterface         : 0x07 (String Descriptor 7)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 243 + 0]  <= 8'h09;//bLength            : 0x09 (9 bytes)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 243 + 1]  <= 8'h04;//bDescriptorType    : 0x04 (Interface Descriptor)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 243 + 2]  <= 8'h03;//bInterfaceNumber   : 0x03
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 243 + 3]  <= 8'h00;//bAlternateSetting  : 0x00
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 243 + 4]  <= 8'h01;//bNumEndpoints      : 0x01 (2 Endpoints)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 243 + 5]  <= 8'h03;//bInterfaceClass    : 0x03 (HID - Human Interface Device)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 243 + 6]  <= 8'h00;//bInterfaceSubClass : 0x00 (None)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 243 + 7]  <= 8'h00;//bInterfaceProtocol : 0x00 (None)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 243 + 8]  <= 8'h07;//iInterface         : 0x07 (String Descriptor 7)
 
         //------------------- HID Descriptor --------------------
-        descrom[DESC_HSCFG_ADDR+ 252 + 0]  <= 8'h09;//bLength            : 0x09 (9 bytes)
-        descrom[DESC_HSCFG_ADDR+ 252 + 1]  <= 8'h21;//bDescriptorType    : 0x21 (HID Descriptor)
-        descrom[DESC_HSCFG_ADDR+ 252 + 2]  <= 8'h11;//bcdHID             : 0x0111 (HID Version 1.11)
-        descrom[DESC_HSCFG_ADDR+ 252 + 3]  <= 8'h01;//bcdHID             : 0x0111 (HID Version 1.11)
-        descrom[DESC_HSCFG_ADDR+ 252 + 4]  <= 8'h00;//bCountryCode       : 0x00 (00 = not localized)
-        descrom[DESC_HSCFG_ADDR+ 252 + 5]  <= 8'h01;//bNumDescriptors    : 0x01
-        descrom[DESC_HSCFG_ADDR+ 252 + 6]  <= 8'h22;//bDescriptorType    : 0x22 (Class=Report)
-        descrom[DESC_HSCFG_ADDR+ 252 + 7]  <= 8'h2B;//wDescriptorLength  : 0x002B (43 bytes)
-        descrom[DESC_HSCFG_ADDR+ 252 + 8]  <= 8'h00;//wDescriptorLength  : 0x002B (43 bytes)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 252 + 0]  <= 8'h09;//bLength            : 0x09 (9 bytes)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 252 + 1]  <= 8'h21;//bDescriptorType    : 0x21 (HID Descriptor)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 252 + 2]  <= 8'h11;//bcdHID             : 0x0111 (HID Version 1.11)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 252 + 3]  <= 8'h01;//bcdHID             : 0x0111 (HID Version 1.11)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 252 + 4]  <= 8'h00;//bCountryCode       : 0x00 (00 = not localized)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 252 + 5]  <= 8'h01;//bNumDescriptors    : 0x01
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 252 + 6]  <= 8'h22;//bDescriptorType    : 0x22 (Class=Report)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 252 + 7]  <= 8'h2B;//wDescriptorLength  : 0x002B (43 bytes)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 252 + 8]  <= 8'h00;//wDescriptorLength  : 0x002B (43 bytes)
 
         //----------------- Endpoint Descriptor -----------------
-        descrom[DESC_HSCFG_ADDR+ 261 + 0]  <= 8'h07;//bLength          : 0x07 (7 bytes)
-        descrom[DESC_HSCFG_ADDR+ 261 + 1]  <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
-        descrom[DESC_HSCFG_ADDR+ 261 + 2]  <= 8'h05;//bEndpointAddress : 0x05 (Direction=OUT EndpointID=5)
-        descrom[DESC_HSCFG_ADDR+ 261 + 3]  <= 8'h03;//bmAttributes     : 0x03 (TransferType=Interrupt)
-        descrom[DESC_HSCFG_ADDR+ 261 + 4]  <= 8'h08;//wMaxPacketSize   : 0x0008
-        descrom[DESC_HSCFG_ADDR+ 261 + 5]  <= 8'h00;//wMaxPacketSize   : 0x0008
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 261 + 0]  <= 8'h07;//bLength          : 0x07 (7 bytes)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 261 + 1]  <= 8'h05;//bDescriptorType  : 0x05 (Endpoint Descriptor)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 261 + 2]  <= 8'h05;//bEndpointAddress : 0x05 (Direction=OUT EndpointID=5)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 261 + 3]  <= 8'h03;//bmAttributes     : 0x03 (TransferType=Interrupt)
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 261 + 4]  <= 8'h08;//wMaxPacketSize   : 0x0008
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 261 + 5]  <= 8'h00;//wMaxPacketSize   : 0x0008
         // Bits 15..13             : 0x00 (reserved, must be zero)
         // Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
         // Bits 10..0              : 0x08 (8 bytes per packet)
-        descrom[DESC_HSCFG_ADDR+ 261 + 6]  <= 8'h00;//bInterval        : 0x00
+        descrom[DESC_HSCFG_ADDR - 0 + 106+ 261 + 6]  <= 8'h00;//bInterval        : 0x00
 
         //------------ Other Speed Configuration Descriptor -------------
         descrom[DESC_OSCFG_ADDR + 0] <= 8'h07;//bDescriptorType          : 0x07 (Other_speed_configuration Descriptor)

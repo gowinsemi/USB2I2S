@@ -4,7 +4,7 @@
 //GOWIN Version: GowinSynthesis V1.9.8.05
 //Part Number: GW2AR-LV18QN88PC7/I6
 //Device: GW2AR-18C
-//Created Time: Fri Mar 04 10:06:05 2022
+//Created Time: Wed Mar 16 16:09:13 2022
 
 //Change the instance name and port connections to the signal names
 //--------Copy here to design--------

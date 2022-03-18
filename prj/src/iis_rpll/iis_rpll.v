@@ -1,19 +1,19 @@
-//Copyright (C)2014-2021 Gowin Semiconductor Corporation.
+//Copyright (C)2014-2022 Gowin Semiconductor Corporation.
 //All rights reserved.
 //File Title: IP file
-//GOWIN Version: V1.9.8Beta
+//GOWIN Version: V1.9.8.05
 //Part Number: GW2AR-LV18QN88PC7/I6
 //Device: GW2AR-18C
-//Created Time: Mon Dec 27 16:52:59 2021
+//Created Time: Mon Mar 14 20:23:05 2022
 
-module iis_rPLL (clkout, clkin);
+module iis_rPLL (clkout, clkoutd, clkin);
 
 output clkout;
+output clkoutd;
 input clkin;
 
 wire lock_o;
 wire clkoutp_o;
-wire clkoutd_o;
 wire clkoutd3_o;
 wire gw_gnd;
 
@@ -23,7 +23,7 @@ rPLL rpll_inst (
     .CLKOUT(clkout),
     .LOCK(lock_o),
     .CLKOUTP(clkoutp_o),
-    .CLKOUTD(clkoutd_o),
+    .CLKOUTD(clkoutd),
     .CLKOUTD3(clkoutd3_o),
     .RESET(gw_gnd),
     .RESET_P(gw_gnd),
@@ -55,7 +55,7 @@ defparam rpll_inst.CLKFB_SEL = "internal";
 defparam rpll_inst.CLKOUT_BYPASS = "false";
 defparam rpll_inst.CLKOUTP_BYPASS = "false";
 defparam rpll_inst.CLKOUTD_BYPASS = "false";
-defparam rpll_inst.DYN_SDIV_SEL = 2;
+defparam rpll_inst.DYN_SDIV_SEL = 8;
 defparam rpll_inst.CLKOUTD_SRC = "CLKOUT";
 defparam rpll_inst.CLKOUTD3_SRC = "CLKOUT";
 defparam rpll_inst.DEVICE = "GW2AR-18C";

@@ -39,9 +39,9 @@ module sync_tx_pkt_fifo
     output       empty
 );
 
-reg [ASIZE:0] wp;          //write point should add 1 bit(N+1) 
-reg [ASIZE:0] pkt_rp;      //write point should add 1 bit(N+1) 
-reg [ASIZE:0] rp;          //read point
+reg [ASIZE - 1:0] wp;          //write point should add 1 bit(N+1) 
+reg [ASIZE - 1:0] pkt_rp;      //write point should add 1 bit(N+1) 
+reg [ASIZE - 1:0] rp;          //read point
 reg [DSIZE - 1:0] RAM [0:(1<<ASIZE) - 1];  //deep 512, 8 bit RAM
 reg [DSIZE - 1:0] oData_reg;   //regsiter of oData
 reg [1:0] txact_dly;
@@ -67,7 +67,12 @@ begin                  // read from RAM
         rp <= 'd0;
     end
     else if ( txact_rise ) begin
-        rp <= pkt_rp;
+        if (read & (~empty)) begin
+            rp <= pkt_rp + 1'b1;
+        end
+        else begin
+            rp <= pkt_rp;
+        end
     end
     else if ( read & (~empty)  )
     begin
@@ -118,6 +123,7 @@ always @ ( posedge CLK or negedge RSTn ) begin    //
 end
 assign full = ( (wp[ASIZE] ^ pkt_rp[ASIZE]) & (wp[ASIZE - 1:0] == pkt_rp[ASIZE - 1:0]) );
 assign empty = ( wp == pkt_rp );
-assign oData = oData_reg;
+//assign oData = oData_reg;
+assign oData = RAM[rp[ASIZE - 1:0]];
 
 endmodule

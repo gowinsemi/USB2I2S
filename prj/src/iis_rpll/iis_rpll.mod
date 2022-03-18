@@ -6,7 +6,7 @@
 
 -mod_name iis_rPLL
 -file_name iis_rpll
--path F:/Winson/USB/Trunk/usb_device_controller/Demo/GW2A18/usb20_demo/usb2iis_src/src/iis_rpll/
+-path D:/Users/DEHUA/Desktop/usbAudio/src/iis_rpll/
 -type PLL
 -rPll true
 -file_type vlg
@@ -17,6 +17,7 @@
 -fbdiv_sel 12
 -dyn_odiv_sel false
 -odiv_sel 8
+-dyn_sdiv_sel 8
 -dyn_da_en true
 -rst_sig false
 -rst_sig_p false
@@ -27,6 +28,7 @@
 -clkout_ft_dir 1
 -en_clkoutp false
 -clkoutp_bypass false
--en_clkoutd false
+-en_clkoutd true
 -clkoutd_bypass false
+-clkoutd_src CLKOUT
 -en_clkoutd3 false
