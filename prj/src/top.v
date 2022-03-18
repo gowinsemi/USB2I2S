@@ -1,6 +1,6 @@
 
 //`define DEBUG
-module Top(
+module top(
 //interconnection
 input          CLK_IN         ,//50MHZ
 input          CLK_IIS_I      ,//
@@ -283,7 +283,7 @@ reg audio_tx_reset;
 
 
 
-audio_tx audio_tx_inst0 //384 192 96 48
+i2s_audio_tx audio_tx_inst0 //384 192 96 48
 (
      .CLK                 (fclk                )//iis clock 98.304MHz
     ,.RESET               (RESET|audio_tx_reset   )//reset
@@ -565,7 +565,7 @@ wire [10:0] audio_rx_num;
 wire [ 7:0] audio_rx_data;
 
 
-audio_rx audio_rx_inst
+i2s_audio_rx audio_rx_inst
 (
      .MCLK          (fclk          )//clock
     ,.RESET         (RESET|audio_rx_reset)//reset
