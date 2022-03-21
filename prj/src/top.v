@@ -8,7 +8,6 @@ output         IIS_LRCK_O     ,
 output         IIS_BCLK_O     ,
 output         IIS_DATA_O     ,
 output         MCLK_O         ,
-input          usb_vbus       ,
 inout          usb_dxp_io     ,
 inout          usb_dxn_io     ,
 input          usb_rxdp_i     ,
@@ -87,6 +86,13 @@ wire       interface_update;
 reg  [7:0] interface0_alter;
 reg  [7:0] interface1_alter;
 reg        iis_freq_sel;
+wire        clkoutd_o            ;
+reg [31:0] sample_rate_cur;
+reg        endpt0_send;
+reg [ 7:0] endpt0_dat;
+wire [ 7:0] audio_rx_data;
+reg [15:0] ff_int;
+reg [15:0] ff_frac;
 
 
 assign MCLK_O=clkoutd_o;
@@ -386,8 +392,6 @@ assign F_meas_frac = (sample_rate_cur == 32'd768000) ? 16'h0000 :
                      (sample_rate_cur == 32'd48000 ) ? 16'h0000 :
                      (sample_rate_cur == 32'd44100 ) ? 16'h8338 : 16'h0000;
 reg [ 7:0] frame_cnt;
-reg [15:0] ff_int;
-reg [15:0] ff_frac;
 reg [31:0] fclk_cnt;
 reg ff_clear;
 reg ff_clear_d0;
@@ -562,7 +566,6 @@ end
 //======IIS RX
 
 wire [10:0] audio_rx_num;
-wire [ 7:0] audio_rx_data;
 
 
 i2s_audio_rx audio_rx_inst
@@ -573,9 +576,9 @@ i2s_audio_rx audio_rx_inst
     ,.R_EN_I        (1'b1          )
     ,.PCM_EN_I      (1'b0          )
     ,.DATA_BITS_I   (s_data_bits   )
-    ,.PCM_LRCK_I    (    )
-    ,.PCM_BCLK_I    (    )
-    ,.PCM_DATA_I    (    )
+    ,.PCM_LRCK_I    (1'b0    )
+    ,.PCM_BCLK_I    (1'b0    )
+    ,.PCM_DATA_I    (1'b0    )
     ,.IIS_LRCK_I    (IIS_LRCK_O    )
     ,.IIS_BCLK_I    (IIS_BCLK_O    )
     ,.IIS_DATA_I    (IIS_DATA_O    )
@@ -774,13 +777,10 @@ reg [15:0] wValue;
 reg [15:0] wIndex;
 reg [15:0] wLength;
 reg        set_sample_rate;
-reg        endpt0_send;
-reg [ 7:0] endpt0_dat;
-reg [7:0] sample_rate_data [0:158];
+reg [7:0] sample_rate_data [0:157];
 reg [16:0] sample_rate_addr;
 
 
-reg [31:0] sample_rate_cur;
 reg [15:0] ch0_volume_cur;
 reg [15:0] ch1_volume_cur;
 reg [15:0] ch2_volume_cur;
