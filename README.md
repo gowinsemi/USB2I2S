@@ -3,13 +3,13 @@
 ## Introduction
 The GOWIN UAC (USB Audio Class) to I2S Audio Card Reference Design provides an example of using various IPs to play and record Audio from a PC using GOWIN FPGAs.  The reference design connects GOWIN Semiconductors USB 2.0 PHY, Device Controller, I2S RX and TX IP Cores as well as provides some basic control logic via USB HID (Human Interface Device).  This provides a starting point to develop custom USB Audio solutions on GOWIN FPGAs.
 
-⚠  <span style="color:blue">*Note - Currently only the I2S Amplifier/Speaker output is working.  There is still an issue being actively debugged with the microphone input.  Design will be updated once the issue is resolved.*</span>⚠
 
 ![USB2I2S_diagram](doc/USB2I2S_diagram.jpg)
 
 ## Key Features
 - Supports USB 2.0 PHY and Device Controller
 - Uses I2S for audio inputs and outputs
+- Provides loopback mode connecting I2S output to I2S input for comparison tests
 - Compatible with native USB Audio Class drivers on Windows, Linux and MAC OS
 - Initializes as a 'GOWIN UAC' USB Audio Card
 - Plays audio from PC through speaker
@@ -19,14 +19,16 @@ The GOWIN UAC (USB Audio Class) to I2S Audio Card Reference Design provides an e
 
 | Port            | Direction | Pin Number | Description |
 | --------------- | --------- | ----------- | ----------- |
+| ***Parameters***                      |           |             |             |
+| p_loopback                            | - | - | 1=I2S Loopback, 0= Mic Input |
 | ***Input Clocks*** |           |             |             |
 | CLK_IN   | Input | 10 | 12Mhz (USB) |
 | CLK_IIS_I    | Input | 35 | 8.192Mhz (Audio) |
-| ***I2S Output to Amplifier and Speakers*** |           |             |             |
+| ***I2S Output to Amplifier/Speaker*** |           |             |             |
 | IIS_LRCK_O   | Output | 81 | I2S LRCLK to Amplifier |
 | IIS_BCLK_O   | Output | 83 | I2S BCLK to Amplifier |
 | IIS_DATA_O   | Output | 82 | I2S Data to Amplifier |
-| ***I2S Output to Amplifier and Speakers*** |           |             |             |
+| ***I2S Output to Amplifier/Speaker*** |           |             |             |
 | IIS_LRCK_I   | Output | 84 | I2S LRCLK to Microphone |
 | IIS_BCLK_I   | Output | 85 | I2S BCLK to Microphone |
 | IIS_DATA_I   | Input | 86 | I2S Data to Microphone |
@@ -116,7 +118,7 @@ The USB audio class demo utilizes two boards. First board is a DK USB 2.0 develo
 
 <span style="color:blue">1x7 female 0.1" header (Amplifier) & 1x6 female 0.1" header (Microphone)</span>
 
-<span style="color:blue">*We have tested using the MAX98357A I2S Amplifier Module and it works with the current design without update.  Microphone will be tested after audio input is working*</span>.⚠
+<span style="color:blue">*We have tested using the MAX98357A I2S Amplifier Module and SPH0645LM microphone module with the current design.*</span>.⚠
 
 ### Current Demonstration Setup with GOWIN DK-USB2.0 + MAX98357A I2S Amplifier Boards
 
