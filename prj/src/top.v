@@ -1,13 +1,21 @@
-
-//`define DEBUG
-module top(
+module top
+#(
+  parameter p_loopback     = 1 //0 = microphone input.  1 = I2S audio received from usb host is sent back to usb host
+)(
 //interconnection
 input          CLK_IN         ,//50MHZ
 input          CLK_IIS_I      ,//
+
+//I2S Microphone Input
+output         IIS_LRCK_I     ,
+output         IIS_BCLK_I     ,
+input          IIS_DATA_I     ,
+
+//I2S Amplifier Output
 output         IIS_LRCK_O     ,
 output         IIS_BCLK_O     ,
 output         IIS_DATA_O     ,
-output         MCLK_O         ,
+
 inout          usb_dxp_io     ,
 inout          usb_dxn_io     ,
 input          usb_rxdp_i     ,
@@ -30,7 +38,32 @@ localparam  SAMPLE_RATE_352_8 = 32'h00056220;
 localparam  SAMPLE_RATE_384   = 32'h0005DC00;
 localparam  SAMPLE_RATE_705_6 = 32'h000AC440;
 localparam  SAMPLE_RATE_768   = 32'h000BB800;
-
+localparam  VOLUME_NUM = 16'h0001;
+localparam  VOLUME_MIN = 16'hC080;
+localparam  VOLUME_MAX = 16'h0000;
+localparam  VOLUME_RES = 16'h0080;
+reg [ 7:0] stage;
+reg [ 7:0] sub_stage;
+reg [ 7:0] req_type;
+reg [ 7:0] req_code;
+reg [15:0] wValue;
+reg [15:0] wIndex;
+reg [15:0] wLength;
+reg        set_sample_rate;
+reg [7:0]  sample_rate_data [0:157];
+reg [16:0] sample_rate_addr;
+reg [15:0] ch0_volume_cur;
+reg [15:0] ch1_volume_cur;
+reg [15:0] ch2_volume_cur;
+reg get_ch0_volume_range;
+reg get_ch1_volume_range;
+reg get_ch2_volume_range;
+reg get_ch0_volume_cur;
+reg get_ch1_volume_cur;
+reg get_ch2_volume_cur;
+reg get_mute_cur;
+reg get_clk_range;
+reg get_clk_cur;
 wire [1:0]  PHY_XCVRSELECT      ;
 wire        PHY_TERMSELECT      ;
 wire [1:0]  PHY_OPMODE          ;
@@ -89,13 +122,14 @@ reg        iis_freq_sel;
 wire        clkoutd_o            ;
 reg [31:0] sample_rate_cur;
 reg        endpt0_send;
-reg [ 7:0] endpt0_dat;
-wire [ 7:0] audio_rx_data;
+reg  [7:0] endpt0_dat;
+wire [7:0] audio_rx_data;
 reg [15:0] ff_int;
 reg [15:0] ff_frac;
+wire [10:0] audio_rx_num;
+reg  [5:0] q_lrclk;
+wire       w_lrck_source, w_data_source;
 
-
-assign MCLK_O=clkoutd_o;
 //==============================================================
 //======PLL 
 Gowin_rPLL u_pll(
@@ -565,8 +599,9 @@ end
 //==============================================================
 //======IIS RX
 
-wire [10:0] audio_rx_num;
-
+assign w_lrck_source = p_loopback ? IIS_LRCK_O : IIS_LRCK_I;  //loopback mode takes I2S data from USB and sends it back out USB.  Otherwise use I2S microphone input
+assign w_data_source = p_loopback ? IIS_DATA_O : IIS_DATA_I;
+assign IIS_BCLK_I    = IIS_BCLK;
 
 i2s_audio_rx audio_rx_inst
 (
@@ -576,12 +611,14 @@ i2s_audio_rx audio_rx_inst
     ,.R_EN_I        (1'b1          )
     ,.PCM_EN_I      (1'b0          )
     ,.DATA_BITS_I   (s_data_bits   )
-    ,.PCM_LRCK_I    (1'b0    )
-    ,.PCM_BCLK_I    (1'b0    )
-    ,.PCM_DATA_I    (1'b0    )
-    ,.IIS_LRCK_I    (IIS_LRCK_O    )
-    ,.IIS_BCLK_I    (IIS_BCLK_O    )
-    ,.IIS_DATA_I    (IIS_DATA_O    )
+    ,.MONO_R_I      (p_loopback==0 )//use mono input (right side only).  Use for microphone if there is only one on I2S interface bus
+    ,.PCM_LRCK_I    (1'b0          )
+    ,.PCM_BCLK_I    (1'b0          )
+    ,.PCM_DATA_I    (1'b0          )
+    ,.IIS_LRCK_I    (w_lrck_source )
+    ,.IIS_BCLK_I    (IIS_BCLK_I    )
+    ,.IIS_DATA_I    (w_data_source )
+    ,.LRCK_O        (IIS_LRCK_I    )
     ,.RD_CLK        (PHY_CLKOUT    )
     ,.USB_TXPKTVAL  (usb_txpktfin  )
     ,.USB_TXACT     (usb_txact     )
@@ -765,35 +802,6 @@ u_usb_desc (
 
 //==============================================================
 //======USB Audio Control
-localparam  VOLUME_NUM = 16'h0001;
-localparam  VOLUME_MIN = 16'hC080;
-localparam  VOLUME_MAX = 16'h0000;
-localparam  VOLUME_RES = 16'h0080;
-reg [ 7:0] stage;
-reg [ 7:0] sub_stage;
-reg [ 7:0] req_type;
-reg [ 7:0] req_code;
-reg [15:0] wValue;
-reg [15:0] wIndex;
-reg [15:0] wLength;
-reg        set_sample_rate;
-reg [7:0] sample_rate_data [0:157];
-reg [16:0] sample_rate_addr;
-
-
-reg [15:0] ch0_volume_cur;
-reg [15:0] ch1_volume_cur;
-reg [15:0] ch2_volume_cur;
-reg get_ch0_volume_range;
-reg get_ch1_volume_range;
-reg get_ch2_volume_range;
-reg get_ch0_volume_cur;
-reg get_ch1_volume_cur;
-reg get_ch2_volume_cur;
-reg get_mute_cur;
-reg get_clk_range;
-reg get_clk_cur;
-
 always @(posedge PHY_CLKOUT,posedge RESET) begin
     if (RESET) begin
         stage <= 8'd0;
