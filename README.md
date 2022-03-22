@@ -120,7 +120,7 @@ The USB audio class demo utilizes two boards. First board is a DK USB 2.0 develo
 
 <span style="color:blue">*We have tested using the MAX98357A I2S Amplifier Module and SPH0645LM microphone module with the current design.*</span>.⚠
 
-### Current Demonstration Setup with GOWIN DK-USB2.0 + MAX98357A I2S Amplifier Boards
+### Demonstration Setup - GOWIN DK-USB2.0 + MAX98357A I2S Amplifier & SPH0645LM4H Microphone Boards
 
 ![Demo_Setup_Diagram](doc/DKUSB2_to_amplifier_setup.jpg)
 
