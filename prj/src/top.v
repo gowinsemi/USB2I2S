@@ -74,8 +74,15 @@ reg [15:0] wValue;
 reg [15:0] wIndex;
 reg [15:0] wLength;
 reg        set_sample_rate;
+reg        set_clk_sel;
+reg        endpt0_send;
+reg [ 7:0] endpt0_dat;
 reg [7:0]  sample_rate_data [0:157];
+reg [7:0] clk_sel_cur;
 reg [16:0] sample_rate_addr;
+
+
+reg [31:0] sample_rate_cur;
 reg [15:0] ch0_volume_cur;
 reg [15:0] ch1_volume_cur;
 reg [15:0] ch2_volume_cur;
@@ -88,6 +95,9 @@ reg get_ch2_volume_cur;
 reg get_mute_cur;
 reg get_clk_range;
 reg get_clk_cur;
+reg get_clk_sel;
+reg get_clk_valid;
+reg [7:0] sample_clk_valid;
 wire [1:0]  PHY_XCVRSELECT      ;
 wire        PHY_TERMSELECT      ;
 wire [1:0]  PHY_OPMODE          ;
@@ -836,6 +846,7 @@ always @(posedge PHY_CLKOUT,posedge RESET) begin
         wIndex <= 16'd0;
         wLength <= 16'd0;
         set_sample_rate <= 1'b0;
+        set_clk_sel <= 1'b0;
         endpt0_send <= 1'd0;
         endpt0_dat  <= 8'd0;
         get_ch0_volume_range <= 1'b0;
@@ -852,6 +863,10 @@ always @(posedge PHY_CLKOUT,posedge RESET) begin
         ch0_volume_cur  <= 16'd0;
         ch1_volume_cur  <= 16'd0;
         ch2_volume_cur  <= 16'd0;
+        clk_sel_cur     <= 8'h01;
+        get_clk_sel     <= 1'b0;
+        get_clk_valid   <= 1'b0;
+        sample_clk_valid<= 8'h01;
     end
     else begin
         if (setup_active) begin
@@ -875,6 +890,7 @@ always @(posedge PHY_CLKOUT,posedge RESET) begin
                         get_clk_cur <= 1'b0;
                         sample_rate_addr <= 16'd0;
                         set_sample_rate <= 1'b0;
+                        set_clk_sel <= 1'b0;
                     end
                     8'd1 : begin
                         req_code <= usb_rxdat;//0x01:CUR 
@@ -912,11 +928,24 @@ always @(posedge PHY_CLKOUT,posedge RESET) begin
                     end
                     8'd6 : begin
                         //wLength
-                        //if (s_req_code == GET_LINE_CODING) begin
-                        //    endpt0_send <= 1'd1;
-                        //end
                         if ((req_type == 8'h21)&&(req_code == 8'h01)&&(wValue[15:0] == 16'h0100)&&(wIndex[15:0]==16'h0500)) begin
                             set_sample_rate <= 1'b1;
+                        end
+                        else if ((req_type == 8'hA1)&&(req_code == 8'h02)&&(wValue[15:0] == 16'h0100)&&(wIndex[15:0]==16'h0500)) begin
+                            get_clk_range <= 1'b1;
+                            sample_rate_addr <= 8'd1;
+                            endpt0_dat  <= sample_rate_data[0];
+                            endpt0_send <= 1'd1;
+                        end
+                        else if ((req_type == 8'hA1)&&(req_code == 8'h01)&&(wValue[15:0] == 16'h0100)&&(wIndex[15:0]==16'h0500)) begin
+                            get_clk_cur <= 1'b1;
+                            endpt0_dat  <= sample_rate_cur[7:0];
+                            endpt0_send <= 1'd1;
+                        end
+                        else if ((req_type == 8'hA1)&&(req_code == 8'h01)&&(wValue[15:0] == 16'h0200)&&(wIndex[15:0]==16'h0500)) begin
+                            get_clk_valid <= 1'b1;
+                            endpt0_dat  <= sample_clk_valid[7:0];
+                            endpt0_send <= 1'd1;
                         end
                         else if ((req_type == 8'hA1)&&(req_code == 8'h02)&&(wValue[15:0] == 16'h0200)&&(wIndex[15:0]==16'h0300)) begin
                             get_ch0_volume_range <= 1'b1;
@@ -953,31 +982,37 @@ always @(posedge PHY_CLKOUT,posedge RESET) begin
                             endpt0_dat  <= 8'd0;
                             endpt0_send <= 1'd1;
                         end
-                        else if ((req_type == 8'hA1)&&(req_code == 8'h02)&&(wValue[15:0] == 16'h0100)&&(wIndex[15:0]==16'h0500)) begin
-                            get_clk_range <= 1'b1;
-                            sample_rate_addr <= 8'd1;
-                            endpt0_dat  <= sample_rate_data[0];
+                        else if ((req_type == 8'hA1)&&(req_code == 8'h01)&&(wValue[15:0] == 16'h0101)&&(wIndex[15:0]==16'h0300)) begin
+                            get_mute_cur <= 1'b1;
+                            endpt0_dat  <= 8'd0;
                             endpt0_send <= 1'd1;
                         end
-                        else if ((req_type == 8'hA1)&&(req_code == 8'h01)&&(wValue[15:0] == 16'h0100)&&(wIndex[15:0]==16'h0500)) begin
-                            get_clk_cur <= 1'b1;
-                            endpt0_dat  <= sample_rate_cur[7:0];
-                            endpt0_send <= 1'd1;
-                        end
+                        //else if ((req_type == 8'hA1)&&(req_code == 8'h01)&&(wValue[15:0] == 16'h0100)&&(wIndex[15:0]==16'h0500)) begin
+                        //    get_clk_sel <= 1'b1;
+                        //    endpt0_dat  <= clk_sel_cur;
+                        //    endpt0_send <= 1'd1;
+                        //end
+                        //else if ((req_type == 8'h21)&&(req_code == 8'h01)&&(wValue[15:0] == 16'h0100)&&(wIndex[15:0]==16'h0500)) begin
+                        //    set_clk_sel <= 1'b1;
+                        //end
                         wLength[7:0] <= usb_rxdat;
                         stage <= stage + 8'd1;
                     end
                     8'd7 : begin
-                        //if (s_req_code == GET_LINE_CODING) begin
-                        //    s_set_len[15:8] <= usb_rxdat;
-                        //    endpt0_send <= 1'd1;
-                        //end
                         wLength[15:8] <= usb_rxdat;
                         stage <= stage + 8'd1;
                         sub_stage <= 8'd0;
                     end
                     8'd8 : ;
                 endcase
+            end
+        end
+        else if (set_clk_sel) begin
+            if ((usb_rxact)&&(endpt_sel == 4'd0)) begin
+                if (usb_rxval) begin
+                    clk_sel_cur <= usb_rxdat;
+                    set_clk_sel <= 1'b0;
+                end
             end
         end
         else if (set_sample_rate) begin
@@ -1210,6 +1245,16 @@ always @(posedge PHY_CLKOUT,posedge RESET) begin
                 end
             end
         end
+        else if (get_clk_valid) begin
+            stage <= 8'd0;
+            if ((usb_txact)&&(endpt_sel == 4'd0)) begin
+                if (usb_txpop) begin
+                    sub_stage <= 8'd0;
+                    endpt0_send <= 1'd0;
+                    get_clk_valid <= 1'd0;
+                end
+            end
+        end
         else if (get_clk_cur) begin
             stage <= 8'd0;
             if ((usb_txact)&&(endpt_sel == 4'd0)) begin
@@ -1243,8 +1288,13 @@ always @(posedge PHY_CLKOUT,posedge RESET) begin
             stage <= 8'd0;
             if ((usb_txact)&&(endpt_sel == 4'd0)) begin
                 if (usb_txpop) begin
-                    //if (sample_rate_addr >= wLength) begin
-                    if (sub_stage == 0) begin
+                    if (sample_rate_addr >= wLength) begin
+                        endpt0_dat <= 8'h00;
+                        endpt0_send <= 1'd0;
+                        sample_rate_addr <= 8'd0;
+                        sub_stage <= 0;
+                    end
+                    else if (sub_stage == 0) begin
                         if (sample_rate_addr >= 64) begin
                             endpt0_dat <= sample_rate_data[sample_rate_addr];
                             sample_rate_addr <= sample_rate_addr + 8'd1;
@@ -1294,6 +1344,15 @@ always @(posedge PHY_CLKOUT,posedge RESET) begin
                 end
                 else if (sub_stage == 3) begin
                     endpt0_send <= 1'd1;
+                end
+            end
+        end
+        else if (get_clk_sel) begin
+            stage <= 8'd0;
+            if ((usb_txact)&&(endpt_sel == 4'd0)) begin
+                if (usb_txpop) begin
+                    endpt0_send <= 1'd0;
+                    get_clk_sel <= 1'b0;
                 end
             end
         end
